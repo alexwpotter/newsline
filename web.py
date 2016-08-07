@@ -28,3 +28,6 @@ def web_main():
 		app.run(host="0.0.0.0")
 	except KeyboardInterrupt:
 		sys.exit()
+
+if __name__ == "__main__":
+	web_main()
