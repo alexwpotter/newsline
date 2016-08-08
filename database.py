@@ -70,14 +70,9 @@ def database_process(cb):
 	db_store(join)
 	print "Done"
 
-def load_cfg(file):
-	import csv
-	
-
 def database_main():
 	print "Polling database"
 	poll(couch['huginn-events'],database_process)
 
 if __name__ == "__main__":
-	load_cfg('./default.cfg')
 	database_main()

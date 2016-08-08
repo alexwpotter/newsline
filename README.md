@@ -13,11 +13,14 @@ A Python system that collects news stories over RSS via [Huginn](https://github.
  * Java >=8
 
 ### Installation 
+Be sure to get:
 
-#### Setup
+* couchdb-python
+* MySQLDB-python
+* NLTK
+* Flask
 
-#### Initialization
- Move default.cfg.example to default.cfg
- change default.cfg to have proper credentials
+
 ### Execution
 
+Run `python run.py` to start the webserver and the database handler.
