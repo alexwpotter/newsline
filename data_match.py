@@ -3,6 +3,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.stem.porter import PorterStemmer
 from nltk.tag import StanfordPOSTagger
+from nltk.corpus import sentiwordnet as swn
 db = couchdb.Server()['huginn-events']
 stop = stopwords.words('english')
 wnl = WordNetLemmatizer().lemmatize
@@ -32,7 +33,8 @@ def parse_event(e):
 		"original": [e['orig']],
 		"bag": e['text'],
 		"id": [e['id']],
-		"date": e['date']
+		"date": e['date'],
+
 		})
 
 def bag_compare(b1,b2,limit=3):
@@ -64,14 +66,17 @@ st = StanfordPOSTagger('english-bidirectional-distsim.tagger')
 def destem_stanford(txt):
 	tag = st.tag(txt)
 	o = []
+	sentiment = 0
 	for word in tag:
 		pos = word[1][:1]
 		if pos == "N" or pos == "V":
 			w = wnl(word[0],pos=pos.lower())
 			o.append(w)
+			#synset=list(swn.senti_synsets(word, "v"))[0]
 		else:
+
 			o.append(stem(word[0]))
-	return o
+	return (o,sentiment)
 
 def vectorize(l):
 	k = set(l)
@@ -87,7 +92,7 @@ def clean_text(txt,id,date):
 	txt = string.translate(txt.encode('ascii'),tbl)
 	rem = [i for i in txt.lower().split() if i not in stop]
 	de = destem_stanford(rem)
-	return {"orig": txt, "text": vectorize(de), "id": id, "date": date}
+	return {"orig": txt, "text": vectorize(de[0]), "id": id, "date": date, "sentiment": de[1]}
 
 def clean_scanner(txt):
 	x = ' '.join(txt.strip().split(' ')[1:])

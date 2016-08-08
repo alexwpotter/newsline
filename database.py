@@ -22,8 +22,8 @@ def search():
 def db_store(table):
 	ids = []
 	out = []
-	q = "insert into headlines (bag, count, date, headline) values {} on duplicate key update count=count+1"
-	tabl = lambda x: '("'+'", "'.join([str(item) for item in [x['bag'],1,x['date'],x['original']]])+'")'
+	q = "insert into headlines (bag, count, date, headline, couch_id) values {} on duplicate key update count=count+1"
+	tabl = lambda x: '("'+'", "'.join([str(item) for item in [x['bag'],1,x['date'],x['original'],x['id']]])+'")'
 	tbl = [tabl(row) for row in table]
 	qu = q.format(', '.join(tbl))
 	#print qu
